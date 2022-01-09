@@ -1,7 +1,7 @@
 <?php
 
 
-namespace KaadonAdmin\Traits;
+namespace KaadonAdmin\baseCurd\Traits;
 
 
 class TraitsException extends \UnexpectedValueException

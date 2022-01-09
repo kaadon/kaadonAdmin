@@ -13,7 +13,7 @@
 namespace KaadonAdmin\Traits\Model;
 
 
-use KaadonAdmin\Traits\TraitsException;
+use KaadonAdmin\baseCurd\Traits\TraitsException;
 
 /**
  * 模型复用

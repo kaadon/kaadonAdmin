@@ -6,7 +6,7 @@
  * Date: 2021/6/22 22:38
  */
 
-namespace KaadonAdmin\Traits\Model;
+namespace KaadonAdmin\baseCurd\Traits\Model;
 
 
 class testModel

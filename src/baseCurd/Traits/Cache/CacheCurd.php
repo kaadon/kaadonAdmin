@@ -10,7 +10,7 @@
 // | github开源项目：https://github.com/zhongshaofa/EasyAdmin
 // +----------------------------------------------------------------------
 
-namespace KaadonAdmin\Traits\Cache;
+namespace KaadonAdmin\baseCurd\Traits\Cache;
 
 use think\facade\Cache;
 

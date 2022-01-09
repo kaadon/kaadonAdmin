@@ -6,10 +6,10 @@
  * Date: 2021/6/17 00:31
  */
 
-namespace KaadonAdmin\BaseClass;
+namespace KaadonAdmin\baseCurd\BaseClass;
 
 
-use KaadonAdmin\Traits\Cache\CacheCurd;
+use KaadonAdmin\baseCurd\Traits\Cache\CacheCurd;
 
 class KaadonCache
 {
