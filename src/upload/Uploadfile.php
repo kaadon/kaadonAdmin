@@ -49,6 +49,11 @@ class Uploadfile
      * @var File
      */
     protected $file;
+    /**
+     * 是否需要保存
+     * @var File
+     */
+    protected $save;
 
     /**
      * 保存上传文件的数据表
@@ -76,6 +81,17 @@ class Uploadfile
     public function setFile($value)
     {
         $this->file = $value;
+        return $this;
+    }
+
+    /**
+     * 设置上传对象
+     * @param $value
+     * @return $this
+     */
+    public function isSave($value = true)
+    {
+        $this->save = $value;
         return $this;
     }
 
@@ -132,6 +148,7 @@ class Uploadfile
             ->setUploadType($this->uploadType)
             ->setTableName($this->tableName)
             ->setFile($this->file)
+            ->setIsSaveTable($this->save)
             ->save();
         return $save;
     }
