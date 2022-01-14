@@ -34,6 +34,12 @@ class FileBase
      * 上传文件对象
      * @var object
      */
+    protected $isSaveTable = true;
+
+    /**
+     * 上传文件对象
+     * @var object
+     */
     protected $file;
 
     /**
@@ -72,6 +78,17 @@ class FileBase
     }
 
     /**
+     * 是否保存到数据库
+     * @param $value
+     * @return $this
+     */
+    public function setIsSaveTable($value = false)
+    {
+        $this->isSaveTable = $value;
+        return $this;
+    }
+
+    /**
      * 设置上传配置
      * @param $value
      * @return $this
@@ -103,6 +120,8 @@ class FileBase
         $this->tableName = $value;
         return $this;
     }
+
+
 
     /**
      * 保存文件

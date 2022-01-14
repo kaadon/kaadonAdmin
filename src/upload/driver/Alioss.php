@@ -33,7 +33,7 @@ class Alioss extends FileBase
         parent::save();
         $upload = Oss::instance($this->uploadConfig)
             ->save($this->completeFilePath, $this->completeFilePath);
-        if ($upload['save'] == true) {
+        if ($upload['save'] == true && $this->isSaveTable == true) {
             SaveDb::trigger($this->tableName, [
                 'upload_type'   => $this->uploadType,
                 'original_name' => $this->file->getOriginalName(),

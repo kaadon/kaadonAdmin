@@ -30,14 +30,17 @@ class Local extends FileBase
     public function save()
     {
         parent::save();
-        SaveDb::trigger($this->tableName, [
-            'upload_type'   => $this->uploadType,
-            'original_name' => $this->file->getOriginalName(),
-            'mime_type'     => $this->file->getOriginalMime(),
-            'file_ext'      => strtolower($this->file->getOriginalExtension()),
-            'url'           => $this->completeFileUrl,
-            'create_time'   => time(),
-        ]);
+        if ($this->isSaveTable == true){
+            SaveDb::trigger($this->tableName, [
+                'upload_type'   => $this->uploadType,
+                'original_name' => $this->file->getOriginalName(),
+                'mime_type'     => $this->file->getOriginalMime(),
+                'file_ext'      => strtolower($this->file->getOriginalExtension()),
+                'url'           => $this->completeFileUrl,
+                'create_time'   => time(),
+            ]);
+        }
+
         return [
             'save' => true,
             'msg'  => '上传成功',
