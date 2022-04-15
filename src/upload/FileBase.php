@@ -49,6 +49,12 @@ class FileBase
     protected $completeFilePath;
 
     /**
+     * 上传完成的文件路径
+     * @var string
+     */
+    protected $staticDomain = null;
+
+    /**
      * 上传完成的文件的URL
      * @var string
      */
@@ -65,6 +71,20 @@ class FileBase
      * @var string
      */
     protected $uploadType = 'local';
+
+    /**
+     * 设置上传方式
+     * @param $value
+     * @return $this
+     */
+    public function setStaticDomain($value = null)
+    {
+        if (!$value) {
+            $value = request()->domain();
+        }
+        $this->staticDomain = $value;
+        return $this;
+    }
 
     /**
      * 设置上传方式
@@ -122,14 +142,16 @@ class FileBase
     }
 
 
-
     /**
      * 保存文件
      */
     public function save()
     {
         $this->completeFilePath = Filesystem::disk('public')->putFile('upload', $this->file);
-        $this->completeFileUrl = request()->domain() . '/' . str_replace(DIRECTORY_SEPARATOR, '/', $this->completeFilePath);
+        if ($this->staticDomain) {
+            $this->staticDomain = request()->domain();
+        }
+        $this->completeFileUrl = $this->staticDomain . '/' . str_replace(DIRECTORY_SEPARATOR, '/', $this->completeFilePath);
     }
 
     /**

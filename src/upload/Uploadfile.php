@@ -53,7 +53,7 @@ class Uploadfile
      * 是否需要保存
      * @var File
      */
-    protected $save;
+    protected $save = true;
 
     /**
      * 保存上传文件的数据表
@@ -148,8 +148,11 @@ class Uploadfile
             ->setUploadType($this->uploadType)
             ->setTableName($this->tableName)
             ->setFile($this->file)
-            ->setIsSaveTable($this->save)
-            ->save();
+            ->setIsSaveTable($this->save);
+        if ($this->uploadType == 'local') {
+            $save = $save->setStaticDomain();
+        }
+        $save->save();
         return $save;
     }
 }

@@ -37,6 +37,8 @@ class Local extends FileBase
                 'mime_type'     => $this->file->getOriginalMime(),
                 'file_ext'      => strtolower($this->file->getOriginalExtension()),
                 'url'           => $this->completeFileUrl,
+                'domain'           => $this->completeFileUrl,
+                'path'           => $this->completeFilePath,
                 'create_time'   => time(),
             ]);
         }
