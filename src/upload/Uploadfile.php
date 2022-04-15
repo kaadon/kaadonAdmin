@@ -149,8 +149,8 @@ class Uploadfile
             ->setTableName($this->tableName)
             ->setFile($this->file)
             ->setIsSaveTable($this->save);
-        if ($this->uploadType == 'local') {
-            $obj->setStaticDomain();
+        if ($this->uploadType == 'local' && !empty($this->uploadConfig['local_domain'])) {
+            $obj->setStaticDomain('//'.$this->uploadConfig['local_domain']);
         }
         $save = $obj->save();
         return $save;

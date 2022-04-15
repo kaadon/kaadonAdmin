@@ -148,7 +148,7 @@ class FileBase
     public function save()
     {
         $this->completeFilePath = Filesystem::disk('public')->putFile('upload', $this->file);
-        if ($this->staticDomain) {
+        if (empty($this->staticDomain)) {
             $this->staticDomain = request()->domain();
         }
         $this->completeFileUrl = $this->staticDomain . '/' . str_replace(DIRECTORY_SEPARATOR, '/', $this->completeFilePath);
