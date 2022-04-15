@@ -67,6 +67,12 @@ class FileBase
     protected $tableName;
 
     /**
+     * 保存上传文件目录区分
+     * @var string
+     */
+    protected $apiClassPath = 'admin';
+
+    /**
      * 上传类型
      * @var string
      */
@@ -124,6 +130,17 @@ class FileBase
      * @param $value
      * @return $this
      */
+    public function setApiClassPath($value)
+    {
+        $this->apiClassPath = $value;
+        return $this;
+    }
+
+    /**
+     * 设置上传配置
+     * @param $value
+     * @return $this
+     */
     public function setFile($value)
     {
         $this->file = $value;
@@ -147,9 +164,9 @@ class FileBase
      */
     public function save()
     {
-        $this->completeFilePath = Filesystem::disk('public')->putFile('upload', $this->file);
+        $this->completeFilePath = Filesystem::disk('public')->putFile('upload/' . $this->apiClassPath, $this->file);
         if (empty($this->staticDomain)) {
-            $this->staticDomain = request()->domain();
+            $this->staticDomain = $this->uploadConfig?:request()->domain();
         }
         $this->completeFileUrl = $this->staticDomain . '/' . str_replace(DIRECTORY_SEPARATOR, '/', $this->completeFilePath);
     }

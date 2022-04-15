@@ -37,6 +37,11 @@ class Uploadfile
      * @var string
      */
     protected $uploadType = 'local';
+    /**
+     * 上传方式
+     * @var string
+     */
+    protected $apiClassName = 'admin';
 
     /**
      * 上传配置文件
@@ -81,6 +86,16 @@ class Uploadfile
     public function setFile($value)
     {
         $this->file = $value;
+        return $this;
+    }
+    /**
+     * 设置上传对象
+     * @param $value
+     * @return $this
+     */
+    public function setApiClassName($value)
+    {
+        $this->apiClassName = $value;
         return $this;
     }
 
@@ -148,9 +163,10 @@ class Uploadfile
             ->setUploadType($this->uploadType)
             ->setTableName($this->tableName)
             ->setFile($this->file)
+            ->setApiClassPath($this->apiClassName)
             ->setIsSaveTable($this->save);
         if ($this->uploadType == 'local' && !empty($this->uploadConfig['local_domain'])) {
-            $obj->setStaticDomain('//'.$this->uploadConfig['local_domain']);
+            $obj->setStaticDomain('//' . $this->uploadConfig['local_domain']);
         }
         $save = $obj->save();
         return $save;
