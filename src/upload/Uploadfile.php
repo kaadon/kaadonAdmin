@@ -144,15 +144,15 @@ class Uploadfile
         } elseif ($this->uploadType == 'txcos') {
             $obj = new Txcos();
         }
-        $save = $obj->setUploadConfig($this->uploadConfig)
+        $obj->setUploadConfig($this->uploadConfig)
             ->setUploadType($this->uploadType)
             ->setTableName($this->tableName)
             ->setFile($this->file)
             ->setIsSaveTable($this->save);
         if ($this->uploadType == 'local') {
-            $save = $save->setStaticDomain();
+            $obj->setStaticDomain();
         }
-        $save->save();
+        $save = $obj->save();
         return $save;
     }
 }
