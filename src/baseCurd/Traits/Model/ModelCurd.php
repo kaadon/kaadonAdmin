@@ -54,8 +54,13 @@ trait ModelCurd
                 ->limit($limit)
                 ->order($order);
         }
-        if (empty($relation)){
+        if (is_string($relation) ){
             $query->$relation();
+        }
+        if (is_array($relation)){
+            foreach ($relation as $item) {
+                $query->$item();
+           }
         }
         $list = $query->select()
             ->toArray();
