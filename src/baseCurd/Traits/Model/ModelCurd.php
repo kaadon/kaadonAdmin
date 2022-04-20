@@ -29,7 +29,7 @@ trait ModelCurd
 //        'modelDefaultData' => [],
 //    ];
 
-    public static function getList($where = [], $page = 1, $limit = 10, $field = '', $order = [], $whereOr = false)
+    public static function getList($where = [], $page = 1, $limit = 10, $field = '', $order = [], $whereOr = false, $relation = null)
     {
 
         if (empty($order)) {
@@ -40,27 +40,25 @@ trait ModelCurd
             $count = self::whereOr($where)
                 ->count();
 
-            $list = self::field($field)
+            $query = self::field($field)
                 ->whereOr($where)
                 ->page($page)
                 ->limit($limit)
-                ->order($order)
-                ->select()
-                ->toArray();
+                ->order($order);
         } else {
-
             $count = self::where($where)
                 ->count();
-
-            $list = self::field($field)
+            $query = self::field($field)
                 ->where($where)
                 ->page($page)
                 ->limit($limit)
-                ->order($order)
-                ->select()
-                ->toArray();
+                ->order($order);
         }
-
+        if (empty($relation)){
+            $query->$relation();
+        }
+        $list = $query->select()
+            ->toArray();
         $pages = ceil($count / $limit);
 
 
@@ -85,12 +83,12 @@ trait ModelCurd
     public static function setUpdate(array $where = [], array $data)
     {
         $update = self::where($where)->find();
-        if (empty($update)){
+        if (empty($update)) {
             return false;
         }
         self::where($where)->update($data);
-        if (property_exists(self::class,'ModelConfig') && array_key_exists(self::$ModelConfig['modelSchema'], $where)) {
-            if (class_exists(self::$ModelConfig['modelCache'])){
+        if (property_exists(self::class, 'ModelConfig') && array_key_exists(self::$ModelConfig['modelSchema'], $where)) {
+            if (class_exists(self::$ModelConfig['modelCache'])) {
                 (new self::$ModelConfig['modelCache']())->del($update[self::modelSchema()]);
             }
         }
@@ -102,11 +100,11 @@ trait ModelCurd
 
     public static function setAdd(array $param)
     {
-        if (!property_exists(self::class,'ModelConfig') || !array_key_exists('modelSchema', self::$ModelConfig)){
-            throw new TraitsException( 'Configuration does not exist!');
+        if (!property_exists(self::class, 'ModelConfig') || !array_key_exists('modelSchema', self::$ModelConfig)) {
+            throw new TraitsException('Configuration does not exist!');
         }
 
-        if (in_array(self::$ModelConfig['modelSchema'],$param)){
+        if (in_array(self::$ModelConfig['modelSchema'], $param)) {
             $user = self::onlyTrashed()->where(self::$ModelConfig['modelSchema'], $param[self::$ModelConfig['modelSchema']])->find();
 
             if (!empty($user)) {
@@ -128,12 +126,12 @@ trait ModelCurd
     public static function setDele($username, $force = false)
     {
 
-        if (!property_exists(self::class,'ModelConfig') || !array_key_exists('modelSchema',self::$ModelConfig)){
-            throw new TraitsException( 'Parameter does not exist!');
+        if (!property_exists(self::class, 'ModelConfig') || !array_key_exists('modelSchema', self::$ModelConfig)) {
+            throw new TraitsException('Parameter does not exist!');
         }
         $user = self::where(self::$ModelConfig['modelSchema'], $username)->find();
         if (empty($user)) {
-            throw new TraitsException( 'Value does not exist!');
+            throw new TraitsException('Value does not exist!');
         }
         if ($force) {
             $dele = $user->force()->delete();
@@ -144,7 +142,7 @@ trait ModelCurd
         if (empty($dele)) {
             throw new TraitsException('failed to delete!');
         }
-        if (array_key_exists('modelCache',self::$ModelConfig) && class_exists(self::$ModelConfig['modelCache'])) {
+        if (array_key_exists('modelCache', self::$ModelConfig) && class_exists(self::$ModelConfig['modelCache'])) {
             (new self::$ModelConfig['modelCache']())->del($username);
         }
 
@@ -155,18 +153,18 @@ trait ModelCurd
     public static function getInfo($username)
     {
         $cache = null;
-        $data = [];
+        $data  = [];
 
-        if (!property_exists(self::class,'ModelConfig')){
-            throw new TraitsException( 'Configuration does not exist!');
+        if (!property_exists(self::class, 'ModelConfig')) {
+            throw new TraitsException('Configuration does not exist!');
         }
 
-        if (array_key_exists('modelCache',self::$ModelConfig) && class_exists(self::$ModelConfig['modelCache'])) {
+        if (array_key_exists('modelCache', self::$ModelConfig) && class_exists(self::$ModelConfig['modelCache'])) {
             $cache = new self::$ModelConfig['modelCache']();
-            $data =  $cache->get($username);
+            $data  = $cache->get($username);
         }
 
-        if (empty($data) && array_key_exists('modelSchema',self::$ModelConfig)) {
+        if (empty($data) && array_key_exists('modelSchema', self::$ModelConfig)) {
 
             $Account = self::where(self::$ModelConfig['modelSchema'], $username)->find();
 
