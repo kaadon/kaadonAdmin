@@ -54,16 +54,22 @@ trait ModelCurd
                 ->limit($limit)
                 ->order($order);
         }
-        if (is_string($relation) ){
-            $query->$relation();
+
+        $originalList = $query->select();
+        $list         = $originalList->toArray();
+        if (!empty($relation)){
+            foreach ($originalList as $key => $item) {
+                if (is_string($relation)) {
+                    $list[$key][$relation] = $item->$relation;
+                }
+                if (is_array($relation)) {
+                    foreach ($relation as $vo) {
+                        $list[$key][$vo] = $item->$vo;
+                    }
+                }
+            }
         }
-        if (is_array($relation)){
-            foreach ($relation as $item) {
-                $query->$item();
-           }
-        }
-        $list = $query->select()
-            ->toArray();
+
         $pages = ceil($count / $limit);
 
 
@@ -75,6 +81,7 @@ trait ModelCurd
 
         return $data;
     }
+
 //
 
     /**
